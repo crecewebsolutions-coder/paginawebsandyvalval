@@ -572,11 +572,21 @@
       const lang = document.documentElement.lang === 'en';
       sendViaEmailJs(formEl, fd);
       if (holdCalendar) sendCalendarHold(fd);
-      fd.append('_subject', lang ? subjectEn : subjectEs);
+
+      // Build a separate copy for the email — "time" is only an internal
+      // reference value used to place the calendar hold, and would confuse
+      // Sandy in the email (it's not what the client actually chose; she
+      // only wrote her approximate preferred time). Exclude it here.
+      const emailFd = new FormData();
+      for (const [key, val] of fd.entries()){
+        if (key === 'time') continue;
+        emailFd.append(key, val);
+      }
+      emailFd.append('_subject', lang ? subjectEn : subjectEs);
 
       fetch(FORMSPREE_URL, {
         method: 'POST',
-        body: fd,
+        body: emailFd,
         headers: { 'Accept': 'application/json' },
       }).then(res => {
         if (res.ok){
@@ -588,7 +598,7 @@
       }).catch(err => {
         console.warn('Formspree submission failed, falling back to mailto:', err);
         const lines = [];
-        for (const [key, val] of fd.entries()){
+        for (const [key, val] of emailFd.entries()){
           if (!val || key === '_subject') continue;
           lines.push(`${key}: ${val}`);
         }
