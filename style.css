@@ -1117,6 +1117,13 @@ section{padding:clamp(70px,11vw,140px) 0;position:relative;}
 .book-quick-option{display:flex; flex-direction:column; align-items:center; gap:8px;}
 .book-quick-option small{font-size:.78rem; color:var(--cream-faint); max-width:220px; line-height:1.4;}
 .btn-xl{font-size:1rem; padding:20px 38px;}
+@media (max-width:600px){
+  .book-quick-card .book-actions{flex-direction:column; align-items:stretch;}
+  .book-quick-option{width:100%;}
+  .btn-xl{padding:16px 22px; font-size:.82rem; width:100%; white-space:normal; line-height:1.3;}
+  .cal-link-btns{flex-direction:column;}
+  .cal-link-btns .btn{width:100%; white-space:normal; line-height:1.3;}
+}
 
 .session-cards{
   display:grid; grid-template-columns:repeat(5,1fr); gap:12px;
