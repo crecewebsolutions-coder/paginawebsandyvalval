@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sandyvalval.com/sitemap.xml
+Sitemap: https://sandyvalvalphotography.com/sitemap.xml
