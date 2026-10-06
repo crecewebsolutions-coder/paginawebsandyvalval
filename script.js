@@ -11,14 +11,14 @@
   //    See the big comment block above the calendar box in reservar.html for
   //    the full step-by-step setup. Fill both values below once you have them.
   const GOOGLE_CALENDAR_CONFIG = {
-    calendarId: '3d1ccf1133166ce9092d6ed8ba631f611ca8e1a1cb4f29a7a0a224734cd30e91@group.calendar.google.com',
-    apiKey: 'AIzaSyAU_kpOw5DOPiiSgAKE2grUxxsJZTyn0EM',
+    calendarId: 'c_9817dcc74b4d31f5181cd40d4c9875aa2f8df3f81b5850676ce8334f2a9b5f77@group.calendar.google.com',
+    apiKey: 'AIzaSyDyP5B5BOb1reX_dhDKJRpLnt1Jlt2U1HA',
   };
 
   // 1b) GOOGLE APPS SCRIPT — automatically holds the selected slot on Sandy's
   //     real calendar the moment a client submits the booking request
   //     (reservar.html only). Leave blank to keep this feature off.
-  const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwv8LvWF5CN11WvIJ3tjWKEb2pMBGqH809vKBeBTLi4OZ-Ju6z7BD-6jWGJ3RwttFBKEA/exec';
+  const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz0_ZaG8WBErL7KsskxRW--yb4u58dFfEpracs4B27UTddSAnzhVgtfE8BGWJCNJwwlhw/exec';
 
   // 2) EMAILJS — automatic emails to both the client and Sandy on booking
   //    (reservar.html, cotizacion.html, contacto.html forms).
@@ -207,7 +207,7 @@
     }
 
     const lang = () => document.documentElement.lang === 'en';
-    const AVAILABLE_TITLE_RE = /disponib|available/i; // matches "Disponible", "Disponibilidad", "Available", etc.
+    const AVAILABLE_TITLE_RE = /disponible|available/i;
     const DEFAULT_DAY_START_HOUR = 9;  // used only for a whole-day "Disponible" event
     const DEFAULT_DAY_END_HOUR = 17;
 
@@ -276,7 +276,7 @@
         calendarLoaded = true;
         statusBox.textContent = lang() ? 'Live calendar connected.' : 'Calendario en vivo conectado.';
         renderMonth();
-        if (selectedDate) updateHiddenFields(); // refresh the summary text with real data
+        if (selectedDate) renderTimes(); // refresh already-open time slots with real data
       } catch (err){
         console.warn('Google Calendar availability check failed:', err);
         statusBox.textContent = lang()
@@ -336,15 +336,36 @@
 
     function selectDay(ymd, btnEl){
       selectedDate = ymd;
+      selectedWindow = null;
       daysGrid.querySelectorAll('.cal-day').forEach(b => b.classList.remove('cal-day--selected'));
       btnEl.classList.add('cal-day--selected');
-      // Auto-pick the first open (non-blocked) window that day as the
-      // behind-the-scenes reference time for the calendar hold — the client
-      // no longer picks an exact slot; she just types her preferred time
-      // below, and Sandy confirms the exact hour manually.
-      const windows = (windowsByDay[selectedDate] || []).slice().sort((a,b) => a.start - b.start);
-      selectedWindow = windows.find(w => !windowIsBlocked(w)) || null;
+      renderTimes();
       updateHiddenFields();
+    }
+
+    function renderTimes(){
+      timesRow.innerHTML = '';
+      if (!selectedDate) return;
+      const windows = (windowsByDay[selectedDate] || []).slice().sort((a,b) => a.start - b.start);
+      windows.forEach(w => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cal-time-btn';
+        btn.textContent = `${formatTimeInPhoenix(w.start)} – ${formatTimeInPhoenix(w.end)}`;
+        const blocked = windowIsBlocked(w);
+        if (blocked){
+          btn.disabled = true;
+        } else {
+          if (selectedWindow && selectedWindow.start.getTime() === w.start.getTime()) btn.classList.add('cal-time-btn--selected');
+          btn.addEventListener('click', () => {
+            selectedWindow = w;
+            timesRow.querySelectorAll('.cal-time-btn').forEach(b => b.classList.remove('cal-time-btn--selected'));
+            btn.classList.add('cal-time-btn--selected');
+            updateHiddenFields();
+          });
+        }
+        timesRow.appendChild(btn);
+      });
     }
 
     function toLocalIsoParts(date){
@@ -361,11 +382,15 @@
       dateInput.value = selectedDate || '';
       if (timeSelect) timeSelect.value = selectedWindow ? `${toLocalIsoParts(selectedWindow.start)}-${toLocalIsoParts(selectedWindow.end)}` : '';
       if (summaryBox){
-        if (selectedDate){
+        if (selectedDate && selectedWindow){
           const dateObj = new Date(selectedDate + 'T12:00:00');
           const dateStr = dateObj.toLocaleDateString(lang() ? 'en-US' : 'es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-          summaryBox.textContent = (lang() ? 'Selected: ' : 'Seleccionaste: ') + dateStr + (lang() ? ' — write your preferred time below.' : ' — escribe tu hora preferida abajo.');
+          const timeStr = `${formatTimeInPhoenix(selectedWindow.start)} – ${formatTimeInPhoenix(selectedWindow.end)}`;
+          summaryBox.textContent = (lang() ? 'Selected: ' : 'Seleccionaste: ') + dateStr + ' · ' + timeStr;
           summaryBox.style.color = 'var(--gold-light)';
+        } else if (selectedDate){
+          summaryBox.textContent = lang() ? 'Now pick a time above.' : 'Ahora elige un horario arriba.';
+          summaryBox.style.color = '';
         } else {
           summaryBox.textContent = '';
         }
@@ -381,7 +406,7 @@
       viewMonth++; if (viewMonth > 11){ viewMonth = 0; viewYear++; }
       renderMonth();
     });
-    document.addEventListener('svv:langchange', () => { renderMonth(); updateHiddenFields(); });
+    document.addEventListener('svv:langchange', () => { renderMonth(); renderTimes(); updateHiddenFields(); });
 
     renderMonth(); // empty grid until real "Disponible" data loads
     loadAvailability();
@@ -546,66 +571,145 @@
     }).catch(err => console.warn('Calendar auto-hold failed (booking still sent normally):', err));
   }
 
-  /* ---------------- FORMS -> FORMSPREE (with mailto as a safety-net fallback) ----------------
-     Every submission is POSTed straight to Formspree, so it reaches Sandy's
-     inbox reliably — no dependency on the visitor's device having an email
-     app set up (which was the problem with mailto-only before). If the
-     Formspree request ever fails (offline, ad-blocker, etc.), mailto still
-     kicks in automatically as a backup so nothing gets silently lost. */
-  const FORMSPREE_URL = 'https://formspree.io/f/xyeypnqa';
+  /* ---------------- POLICY MODAL & AGREEMENT (reservar.html) ---------------- */
+  let openPolicyModalFn = null;
+  (() => {
+    const modalOverlay = document.getElementById('policyModalOverlay');
+    if (!modalOverlay) return; // not on this page
 
-  function showFormSuccess(formEl, lang){
-    const msg = document.createElement('p');
-    msg.className = 'qf-note';
-    msg.style.cssText = 'margin-top:14px; color:var(--gold-light); font-weight:600;';
-    msg.textContent = lang
-      ? 'Thank you! Your request was sent — Sandy will get back to you soon.'
-      : '¡Gracias! Tu solicitud fue enviada — Sandy te contactará pronto.';
-    formEl.appendChild(msg);
-  }
+    const openBtn = document.getElementById('openPolicyModalBtn');
+    const openLink = document.getElementById('openPolicyModalLink');
+    const closeBtn = document.getElementById('closePolicyModalBtn');
+    const dismissBtn = document.getElementById('dismissPolicyModalBtn');
+    const acceptBtn = document.getElementById('acceptPolicyModalBtn');
+    const checkbox = document.getElementById('policyAgreement');
+    const container = document.getElementById('policyAgreementContainer');
+    const badge = document.getElementById('policyStatusBadge');
+    const errorMsg = document.getElementById('policyErrorMsg');
+    const submitBtn = document.getElementById('submitBookingBtn');
 
+    function openModal() {
+      modalOverlay.classList.add('is-open');
+      modalOverlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      const body = modalOverlay.querySelector('.policy-modal-body');
+      if (body) body.scrollTop = 0;
+    }
+
+    function closeModal() {
+      modalOverlay.classList.remove('is-open');
+      modalOverlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    function updateAcceptanceUI(isAccepted) {
+      if (container) {
+        container.classList.toggle('accepted', isAccepted);
+        if (isAccepted) container.classList.remove('has-error');
+      }
+      if (badge) {
+        badge.style.display = isAccepted ? 'inline-flex' : 'none';
+      }
+      if (errorMsg && isAccepted) {
+        errorMsg.style.display = 'none';
+      }
+    }
+
+    openPolicyModalFn = openModal;
+
+    if (openBtn) openBtn.addEventListener('click', openModal);
+    if (openLink) openLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      openModal();
+    });
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (dismissBtn) dismissBtn.addEventListener('click', closeModal);
+
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modalOverlay.classList.contains('is-open')) {
+        closeModal();
+      }
+    });
+
+    if (acceptBtn) {
+      acceptBtn.addEventListener('click', () => {
+        if (checkbox) {
+          checkbox.checked = true;
+          checkbox.dispatchEvent(new Event('change'));
+        }
+        updateAcceptanceUI(true);
+        closeModal();
+      });
+    }
+
+    if (checkbox) {
+      checkbox.addEventListener('change', () => {
+        updateAcceptanceUI(checkbox.checked);
+      });
+    }
+
+    if (submitBtn) {
+      submitBtn.addEventListener('click', (e) => {
+        if (checkbox && !checkbox.checked) {
+          const form = document.getElementById('quoteForm');
+          if (form) {
+            const nameEl = form.querySelector('[name="name"]');
+            const emailEl = form.querySelector('[name="email"]');
+            if (nameEl && nameEl.value.trim() && emailEl && emailEl.value.trim()) {
+              e.preventDefault();
+              if (container) {
+                container.classList.add('has-error');
+                setTimeout(() => container.classList.remove('has-error'), 800);
+              }
+              if (errorMsg) errorMsg.style.display = 'block';
+              openModal();
+            }
+          }
+        }
+      });
+    }
+  })();
+
+  /* ---------------- FORMS -> MAILTO ---------------- */
   function wireMailtoForm(formEl, subjectEs, subjectEn, holdCalendar){
     if (!formEl) return;
     formEl.addEventListener('submit', (e) => {
       e.preventDefault();
+
+      if (formEl.id === 'quoteForm') {
+        const checkbox = document.getElementById('policyAgreement');
+        const container = document.getElementById('policyAgreementContainer');
+        const errorMsg = document.getElementById('policyErrorMsg');
+        if (checkbox && !checkbox.checked) {
+          if (container) {
+            container.classList.add('has-error');
+            setTimeout(() => container.classList.remove('has-error'), 800);
+          }
+          if (errorMsg) errorMsg.style.display = 'block';
+          if (typeof openPolicyModalFn === 'function') openPolicyModalFn();
+          return;
+        }
+      }
+
       const fd = new FormData(formEl);
-      const lang = document.documentElement.lang === 'en';
+      if (formEl.id === 'quoteForm') {
+        fd.set('politicas_aceptadas', 'Sí (Aceptó las políticas del estudio y servicios: anticipo 20%, cancelación/reagendado, y NO entrega de fotos sin editar/RAW)');
+      }
       sendViaEmailJs(formEl, fd);
       if (holdCalendar) sendCalendarHold(fd);
-
-      // Build a separate copy for the email — "time" is only an internal
-      // reference value used to place the calendar hold, and would confuse
-      // Sandy in the email (it's not what the client actually chose; she
-      // only wrote her approximate preferred time). Exclude it here.
-      const emailFd = new FormData();
+      const lang = document.documentElement.lang === 'en';
+      const lines = [];
       for (const [key, val] of fd.entries()){
-        if (key === 'time') continue;
-        emailFd.append(key, val);
+        if (!val) continue;
+        lines.push(`${key}: ${val}`);
       }
-      emailFd.append('_subject', lang ? subjectEn : subjectEs);
-
-      fetch(FORMSPREE_URL, {
-        method: 'POST',
-        body: emailFd,
-        headers: { 'Accept': 'application/json' },
-      }).then(res => {
-        if (res.ok){
-          showFormSuccess(formEl, lang);
-          formEl.reset();
-        } else {
-          throw new Error('Formspree responded with an error');
-        }
-      }).catch(err => {
-        console.warn('Formspree submission failed, falling back to mailto:', err);
-        const lines = [];
-        for (const [key, val] of emailFd.entries()){
-          if (!val || key === '_subject') continue;
-          lines.push(`${key}: ${val}`);
-        }
-        const subject = encodeURIComponent(lang ? subjectEn : subjectEs);
-        const body = encodeURIComponent(lines.join('\n'));
-        window.location.href = `mailto:sandyvalala@gmail.com?subject=${subject}&body=${body}`;
-      });
+      const subject = encodeURIComponent(lang ? subjectEn : subjectEs);
+      const body = encodeURIComponent(lines.join('\n'));
+      window.location.href = `mailto:sandyvalala@gmail.com?subject=${subject}&body=${body}`;
     });
   }
   wireMailtoForm(document.getElementById('quoteForm'), 'Solicitud de Reserva', 'Booking Request', true);
@@ -625,29 +729,39 @@
       const lang = document.documentElement.lang === 'en';
       const nameInput = document.getElementById('bookName');
       const dateInput = document.getElementById('bookDate');
-      const timeEstimateInput = document.getElementById('bookTimeEstimate');
+      const timeInput = document.getElementById('bookTime');
       const clientName = nameInput && nameInput.value ? nameInput.value.trim() : '';
       const sessionName = sessionValue && sessionValue.value ? sessionValue.value : '';
       const dateVal = dateInput ? dateInput.value : '';
-      const timeEstimate = timeEstimateInput && timeEstimateInput.value ? timeEstimateInput.value.trim() : '';
+      const timeVal = timeInput ? timeInput.value : '';
 
-      let dateStr = '';
+      let dateTimeStr = '';
       if (dateVal){
         const dateObj = new Date(dateVal + 'T12:00:00');
-        dateStr = dateObj.toLocaleDateString(lang ? 'en-US' : 'es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+        const dateStr = dateObj.toLocaleDateString(lang ? 'en-US' : 'es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+        if (timeVal){
+          const [startTime, endTime] = timeVal.split('-');
+          const fmt = (t) => {
+            const [h, m] = t.split(':').map(Number);
+            const h12 = ((h + 11) % 12) + 1;
+            const suffix = h < 12 ? 'am' : 'pm';
+            return `${h12}:${String(m).padStart(2,'0')} ${suffix}`;
+          };
+          dateTimeStr = `${dateStr}, ${fmt(startTime)}–${fmt(endTime)}`;
+        } else {
+          dateTimeStr = dateStr;
+        }
       }
 
       const lines = lang
         ? [`Hi Sandy, I already sent my Zelle deposit — attaching my receipt here 📎`,
            clientName ? `Name: ${clientName}` : '',
            sessionName ? `Experience: ${sessionName}` : '',
-           dateStr ? `Date: ${dateStr}` : '',
-           timeEstimate ? `Preferred time: ${timeEstimate}` : '']
+           dateTimeStr ? `Date & time: ${dateTimeStr}` : '']
         : [`Hola Sandy, ya envié mi depósito por Zelle. Adjunto mi comprobante aquí 📎`,
            clientName ? `Nombre: ${clientName}` : '',
            sessionName ? `Experiencia: ${sessionName}` : '',
-           dateStr ? `Fecha: ${dateStr}` : '',
-           timeEstimate ? `Hora preferida: ${timeEstimate}` : ''];
+           dateTimeStr ? `Fecha y hora: ${dateTimeStr}` : ''];
 
       const message = lines.filter(Boolean).join('\n');
       receiptBtn.href = `https://wa.me/14806378324?text=${encodeURIComponent(message)}`;
