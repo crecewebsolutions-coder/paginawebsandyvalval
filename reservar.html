@@ -72,21 +72,12 @@
 <section class="book" style="padding-top:90px;">
   <div class="section-inner book-inner">
 
-    <div class="book-quick-card reveal">
-      <p class="kicker gold center" style="margin-bottom:18px;"><span class="t" data-en="Fastest way">La forma más rápida</span></p>
-      <div class="book-actions">
-        <div class="book-quick-option">
-          <a href="https://wa.me/14806378324?text=Hola%20Sandy%2C%20me%20interesa%20reservar%20una%20experiencia%20de%20fotograf%C3%ADa" target="_blank" rel="noopener" class="btn btn-gold btn-lg btn-xl">
-            <svg viewBox="0 0 24 24" class="btn-icon"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm5.7 14.2c-.2.6-1.4 1.2-2 1.3-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.6-.6-2.9-1.3-4.8-4.2-4.9-4.4-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.4.2.5.7 1.8.8 1.9.1.2.1.4 0 .6-.6 1.2-1.2 1.1-.6 2 1.1 1.9 2.2 2.5 3.9 3.3.3.1.5.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.7-.1.3.1 1.9.9 2.2 1.1.3.1.5.2.6.3.1.2.1.9-.1 1.5z"/></svg>
-            <span><span class="t" data-en="Book via WhatsApp">Reservar por WhatsApp</span></span>
-          </a>
-          <small><span class="t" data-en="Message Sandy directly — she&rsquo;ll help you pick everything together.">Escríbele directo a Sandy — ella te ayuda a elegir todo juntas.</span></small>
-        </div>
-        <div class="book-quick-option">
-          <a href="mailto:sandyvalala@gmail.com?subject=Reserva%20de%20Experiencia" class="btn btn-ghost btn-lg btn-xl"><span class="t" data-en="Send an Email">Enviar un Correo</span></a>
-          <small><span class="t" data-en="Prefer email? Send your request and Sandy will reply within 24–48 hours.">¿Prefieres correo? Manda tu solicitud y Sandy responde en 24–48 horas.</span></small>
-        </div>
-      </div>
+    <div class="book-actions reveal">
+      <a href="https://wa.me/14806378324?text=Hola%20Sandy%2C%20me%20interesa%20reservar%20una%20experiencia%20de%20fotograf%C3%ADa" target="_blank" rel="noopener" class="btn btn-gold btn-lg">
+        <svg viewBox="0 0 24 24" class="btn-icon"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm5.7 14.2c-.2.6-1.4 1.2-2 1.3-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.6-.6-2.9-1.3-4.8-4.2-4.9-4.4-.1-.2-1.2-1.6-1.2-3s.7-2.1 1-2.4c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.4.2.5.7 1.8.8 1.9.1.2.1.4 0 .6-.6 1.2-1.2 1.1-.6 2 1.1 1.9 2.2 2.5 3.9 3.3.3.1.5.1.6-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.7-.1.3.1 1.9.9 2.2 1.1.3.1.5.2.6.3.1.2.1.9-.1 1.5z"/></svg>
+        <span><span class="t" data-en="Book via WhatsApp">Reservar por WhatsApp</span></span>
+      </a>
+      <a href="mailto:sandyvalala@gmail.com?subject=Reserva%20de%20Experiencia" class="btn btn-ghost btn-lg"><span class="t" data-en="Send an Email">Enviar un Correo</span></a>
     </div>
 
     <p class="center sub reveal" style="margin-top:26px;"><span class="t" data-en="Prefer to do it yourself? Fill out the step-by-step booking form below.">¿Prefieres hacerlo tú misma? Completa el formulario de reserva paso a paso abajo.</span></p>
@@ -101,11 +92,10 @@
       <div class="bs-step"><span class="bs-num">4</span><span class="bs-label"><span class="t" data-en="Confirm">Confirmar</span></span></div>
     </div>
 
-    <form class="quote-form reveal" id="quoteForm" style="padding:0; background:transparent; border:none;">
+    <form class="quote-form reveal" id="quoteForm">
 
-      <div class="book-step-card">
-        <h3 class="book-step-title"><span class="step-num-badge">1</span> <span class="t" data-en="Choose your experience">Elige tu experiencia</span></h3>
-        <div class="session-cards" id="sessionCards">
+      <h3 class="book-step-title">1. <span class="t" data-en="Choose your experience">Elige tu experiencia</span></h3>
+      <div class="session-cards" id="sessionCards">
         <button type="button" class="session-card" data-value="Mini — $350">
           <span class="sc-name"><span class="t" data-en="Mini">Mini</span></span>
           <span class="sc-price">$350</span>
@@ -132,16 +122,14 @@
           <span class="sc-price">?</span>
           <span class="sc-meta"><span class="t" data-en="Tell me the details">Cuéntame los detalles</span></span>
         </button>
-        </div>
-        <input type="hidden" name="session" id="sessionValue" value="">
       </div>
+      <input type="hidden" name="session" id="sessionValue" value="">
 
-      <div class="book-step-card">
-        <h3 class="book-step-title"><span class="step-num-badge">2</span> <span class="t" data-en="Preferred date & time">Fecha y horario preferido</span></h3>
-        <input type="hidden" name="date" id="bookDate">
-        <input type="hidden" name="time" id="bookTime">
+      <h3 class="book-step-title">2. <span class="t" data-en="Preferred date & time">Fecha y horario preferido</span></h3>
+      <input type="hidden" name="date" id="bookDate">
+      <input type="hidden" name="time" id="bookTime">
 
-        <div class="calendar-embed reveal" style="margin-top:0;">
+      <div class="calendar-embed reveal">
         <div class="calendar-embed-head">
           <svg viewBox="0 0 24 24" class="cal-icon"><path d="M7 2v3M17 2v3M3 9h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></svg>
           <div>
@@ -159,16 +147,13 @@
             <span><span class="t" data-en="S">D</span></span><span><span class="t" data-en="M">L</span></span><span><span class="t" data-en="T">M</span></span><span><span class="t" data-en="W">M</span></span><span><span class="t" data-en="T">J</span></span><span><span class="t" data-en="F">V</span></span><span><span class="t" data-en="S">S</span></span>
           </div>
           <div class="cal-days" id="calDaysGrid"></div>
-        </div>
-        <div class="qf-field" style="margin:18px 24px 0;">
-          <label><span class="t" data-en="What time would you like? (approximate)">¿A qué hora te gustaría? (aproximada)</span></label>
-          <input type="text" id="bookTimeEstimate" name="time_estimate" placeholder="Ej. Por la mañana, como a las 10am" data-es-placeholder="Ej. Por la mañana, como a las 10am" data-en-placeholder="E.g. In the morning, around 10am">
+          <div class="cal-times" id="calTimesRow"></div>
         </div>
         <p class="qf-note" id="calSelectionSummary" style="margin:14px 24px 0;"></p>
         <p class="qf-note" id="calAvailabilityStatus" style="margin:4px 24px 0;"></p>
-        </div>
+      </div>
 
-        <div class="cal-link-box reveal">
+      <div class="cal-link-box reveal">
         <h4><span class="t" data-en="Link this appointment to your email &amp; calendar">Vincula esta cita a tu correo y calendario</span></h4>
         <p class="qf-note" style="margin:0 0 14px;"><span class="t" data-en="Fill in your date above and your email in step 3 below, then add this hold to whichever calendar you use — it&rsquo;ll be saved under your email automatically.">Llena tu fecha arriba y tu correo en el paso 3 más abajo, y agrega este recordatorio al calendario que uses — quedará guardado bajo tu correo automáticamente.</span></p>
         <div class="cal-link-btns">
@@ -182,29 +167,58 @@
           </button>
         </div>
         <p class="qf-note" id="calendarNote"><span class="t" data-en="Select a date above and your email in step 3 to enable this. This does not confirm your appointment — it just helps you not forget it while we confirm.">Selecciona una fecha arriba y tu correo en el paso 3 para habilitar esto. Esto no confirma tu cita — solo te ayuda a no olvidarla mientras confirmamos.</span></p>
-        </div>
       </div>
 
-      <div class="book-step-card">
-        <h3 class="book-step-title"><span class="step-num-badge">3</span> <span class="t" data-en="Your info">Tus datos</span></h3>
-        <div class="qf-grid">
+      <h3 class="book-step-title">3. <span class="t" data-en="Your info">Tus datos</span></h3>
+      <div class="qf-grid">
         <div class="qf-field"><label><span class="t" data-en="Name">Nombre</span></label><input type="text" name="name" id="bookName" required></div>
         <div class="qf-field"><label><span class="t" data-en="Email">Correo</span></label><input type="email" name="email" required></div>
         <div class="qf-field"><label><span class="t" data-en="Phone">Teléfono</span></label><input type="tel" name="phone"></div>
         <div class="qf-field"><label><span class="t" data-en="Approximate Budget">Presupuesto aproximado</span></label><input type="text" name="budget" placeholder="$350 - $1,500"></div>
-        </div>
-        <div class="qf-field qf-full">
+      </div>
+      <div class="qf-field qf-full">
         <label><span class="t" data-en="Tell me about your vision">Cuéntame tu visión</span></label>
         <textarea name="message" rows="4" placeholder="¿Qué estás celebrando? ¿Alguna referencia o inspiración?" data-es-placeholder="¿Qué estás celebrando? ¿Alguna referencia o inspiración?" data-en-placeholder="What are you celebrating? Any references or inspiration?"></textarea>
+      </div>
+
+      <h3 class="book-step-title">4. <span class="t" data-en="Confirm &amp; Policies">Confirmar y Políticas</span></h3>
+
+      <div class="policy-acceptance-box" id="policyAgreementContainer">
+        <div class="policy-checkbox-line">
+          <label class="policy-custom-check" for="policyAgreement">
+            <input type="checkbox" id="policyAgreement" name="policy_agreement" required>
+            <span class="policy-checkmark" aria-hidden="true"></span>
+            <span class="policy-label-content">
+              <span class="t" data-en="I have read and accept the">He leído y acepto las</span>
+              <button type="button" class="policy-modal-link-btn" id="openPolicyModalLink">
+                <span class="t" data-en="Studio Policies &amp; Services">Políticas y Servicios del Estudio</span>
+              </button>
+              <span class="policy-star" title="Requerido">*</span>
+            </span>
+          </label>
+        </div>
+        <p class="policy-summary-caption">
+          <span class="t" data-en="Required to book. Includes non-refundable 20% deposit, 3-day notice to reschedule, 20-min grace period, and our strict policy that unedited/RAW photos are not delivered.">Requerido para reservar. Incluye anticipo no reembolsable del 20%, 3 días para reagendar, tolerancia de 20 min y nuestra política estricta de no entregar fotos sin editar ni archivos RAW.</span>
+        </p>
+        <div class="policy-actions-row">
+          <button type="button" class="btn btn-outline btn-sm" id="openPolicyModalBtn">
+            <svg viewBox="0 0 24 24" class="btn-icon" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            <span class="t" data-en="Read Policies (Click to View)">Leer Políticas (Clic para Ver)</span>
+          </button>
+          <span class="policy-status-badge" id="policyStatusBadge" style="display:none;">
+            <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:#c69a54;fill:none;stroke-width:2.5;"><polyline points="20 6 9 17 4 12"/></svg>
+            <span class="t" data-en="Policies Accepted">Políticas Aceptadas</span>
+          </span>
+        </div>
+        <div class="policy-error-msg" id="policyErrorMsg" style="display:none;" role="alert">
+          <span class="t" data-en="⚠️ Please read and accept the studio policies before requesting your booking.">⚠️ Por favor lee y acepta las políticas del estudio antes de solicitar tu reserva.</span>
         </div>
       </div>
 
-      <div class="book-step-card">
-        <h3 class="book-step-title"><span class="step-num-badge">4</span> <span class="t" data-en="Confirm">Confirmar</span></h3>
-        <button type="submit" class="btn btn-gold btn-xl"><span class="t" data-en="Request My Booking">Solicitar mi Reserva</span></button>
-        <p class="qf-note" style="margin-top:14px;"><span class="t" data-en="This form opens your email client with your details pre-filled. Your date is confirmed once your 20% deposit is received.">Este formulario abre tu correo con tus datos listos para enviar. Tu fecha se confirma al recibir tu depósito del 20%.</span></p>
+      <button type="submit" class="btn btn-gold" id="submitBookingBtn"><span class="t" data-en="Request My Booking">Solicitar mi Reserva</span></button>
+      <p class="qf-note"><span class="t" data-en="This form opens your email client with your details pre-filled. Your date is confirmed once your 20% deposit is received.">Este formulario abre tu correo con tus datos listos para enviar. Tu fecha se confirma al recibir tu depósito del 20%.</span></p>
 
-        <div class="zelle-box reveal">
+      <div class="zelle-box reveal">
         <h4><span class="t" data-en="Pay your deposit via Zelle">Paga tu depósito por Zelle</span></h4>
         <p><span class="t" data-en="Send your 20% deposit using Zelle, directly from your bank&rsquo;s app — no PayPal or card needed.">Envía tu depósito del 20% usando Zelle, directamente desde la app de tu banco — no necesitas PayPal ni tarjeta.</span></p>
         <div class="zelle-detail">
@@ -222,7 +236,6 @@
           <span class="t" data-en="Open WhatsApp to Attach My Receipt">Abrir WhatsApp para Adjuntar mi Comprobante</span>
         </a>
         <p class="qf-note" style="margin-top:10px; font-size:12px;"><span class="t" data-en="WhatsApp doesn&rsquo;t allow websites to attach photos automatically — you&rsquo;ll attach your screenshot yourself once the chat opens, same as sending any WhatsApp photo.">WhatsApp no permite que las páginas web adjunten fotos automáticamente — tú adjuntas tu captura una vez que se abra el chat, igual que al mandar cualquier foto por WhatsApp.</span></p>
-        </div>
       </div>
       <!--
         ZELLE PAYMENTS — important reality-check (for Sandy / developer):
@@ -260,6 +273,93 @@
     </div>
   </div>
 </section>
+
+<!-- VENTANA FLOTANTE (MODAL): POLÍTICAS Y SERVICIOS DEL ESTUDIO -->
+<div class="policy-modal-overlay" id="policyModalOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="policyModalTitle">
+  <div class="policy-modal-card" id="policyModalCard">
+    <div class="policy-modal-header">
+      <div>
+        <p class="kicker gold" style="margin-bottom:4px;"><span class="t" data-en="Terms &amp; Policies">Términos y Políticas</span></p>
+        <h3 id="policyModalTitle" class="policy-modal-title"><span class="t" data-en="Studio Policies &amp; Services">Políticas y Servicios del Estudio</span></h3>
+        <p class="policy-modal-sub"><span class="t" data-en="Please read carefully before confirming your reservation. By booking, you agree to these conditions.">Por favor lee atentamente antes de confirmar tu reserva. Al agendar, aceptas estas condiciones.</span></p>
+      </div>
+      <button type="button" class="policy-modal-close" id="closePolicyModalBtn" aria-label="Cerrar ventana">&times;</button>
+    </div>
+
+    <div class="policy-modal-body">
+      <!-- AVISO ESTRICTO DE NO FOTOS SIN EDITAR -->
+      <div class="policy-notice-banner">
+        <div class="pnb-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="pnb-text">
+          <h4 class="pnb-title"><span class="t" data-en="Important: Unedited Photos &amp; RAW Files Are NOT Delivered">Importante: NO se entregan fotos sin editar ni archivos RAW</span></h4>
+          <p><span class="t" data-en="Under no circumstances do we deliver unedited photographs or camera RAW files. Every photograph delivered to you is a finished work of art with professional color correction, high-end retouching, and our studio&rsquo;s artistic signature style.">Bajo ninguna circunstancia entregamos fotografías sin editar ni archivos en bruto (RAW). Cada fotografía entregada es una obra finalizada con corrección de color, retoque profesional de alta gama y el estilo artístico distintivo de Sandy ValVal Photography Studio.</span></p>
+        </div>
+      </div>
+
+      <div class="policy-sections-list">
+        <div class="policy-item-card">
+          <div class="pic-header">
+            <span class="pic-num">01</span>
+            <h4><span class="t" data-en="20% Non-Refundable Deposit">Anticipo del 20% (No reembolsable)</span></h4>
+          </div>
+          <p><span class="t" data-en="A 20% deposit is required the same day you decide to book to confirm and lock in your date on the schedule. The deposit is non-refundable and applies toward your session total. Without a deposit, the session is not booked.">Se requiere un depósito del 20% el mismo día en que decides reservar para confirmar y apartar tu fecha en la agenda. El anticipo no es reembolsable y se abona al total de tu paquete. Sin depósito, la fecha no queda reservada.</span></p>
+        </div>
+
+        <div class="policy-item-card">
+          <div class="pic-header">
+            <span class="pic-num">02</span>
+            <h4><span class="t" data-en="Cancellations &amp; Rescheduling">Cancelaciones y Reagendado</span></h4>
+          </div>
+          <p><span class="t" data-en="Cancellations must be notified with at least 3 days advance notice. You may reschedule your session only once, with a 6-month validity, at no additional fee. Same-day rescheduling is not permitted.">Las cancelaciones deben notificarse con al menos 3 días de anticipación. Puedes reagendar tu cita 1 sola vez sin costo adicional, con una vigencia de hasta 6 meses. No es posible reagendar para el mismo día.</span></p>
+        </div>
+
+        <div class="policy-item-card">
+          <div class="pic-header">
+            <span class="pic-num">03</span>
+            <h4><span class="t" data-en="Punctuality &amp; 20-Min Grace Period">Tolerancia y Retrasos (20 Minutos)</span></h4>
+          </div>
+          <p><span class="t" data-en="The maximum grace period is 20 minutes. If the delay exceeds 20 minutes, the session is cancelled to respect other scheduled clients, and the deposit is forfeited.">El tiempo máximo de espera es de 20 minutos. Si el retraso supera los 20 minutos, la sesión se cancela por respeto a los tiempos de agenda de otras clientas y el depósito no se reembolsa.</span></p>
+        </div>
+
+        <div class="policy-item-card">
+          <div class="pic-header">
+            <span class="pic-num">04</span>
+            <h4><span class="t" data-en="Private Digital Gallery Delivery">Entrega en Galería Digital Privada</span></h4>
+          </div>
+          <p><span class="t" data-en="Your private online gallery with all final edited high-resolution images will be ready in approximately 1 week. Additional retouched images can be purchased for $20 each.">Tu galería online privada con las fotografías finales editadas en alta resolución estará lista en aproximadamente 1 semana. Puedes adquirir fotos retocadas adicionales por $20 cada una.</span></p>
+        </div>
+
+        <div class="policy-item-card">
+          <div class="pic-header">
+            <span class="pic-num">05</span>
+            <h4><span class="t" data-en="Personal License &amp; Copyright">Copyright y Licencia Personal</span></h4>
+          </div>
+          <p><span class="t" data-en="The photographer retains the copyright. You receive a personal-use license (social media, prints, gifts). Commercial advertising requires a separate license.">La fotógrafa conserva los derechos de autor. Recibes una licencia para uso personal (redes sociales, impresiones personales, regalos). El uso comercial publicitario requiere licencia adicional.</span></p>
+        </div>
+
+        <div class="policy-item-card">
+          <div class="pic-header">
+            <span class="pic-num">06</span>
+            <h4><span class="t" data-en="Consent &amp; Privacy (Model Release)">Consentimiento y Privacidad</span></h4>
+          </div>
+          <p><span class="t" data-en="Before your session, you sign a release where you choose your privacy level: public portfolio, private portfolio only for prospective clients, or total confidentiality. Your choice is 100% respected.">Antes de tu sesión firmarás un consentimiento donde tú eliges tu nivel de privacidad: portafolio público, portafolio privado para futuras clientas, o privacidad total sin publicación. Tu decisión siempre se respeta.</span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="policy-modal-footer">
+      <button type="button" class="btn btn-outline" id="dismissPolicyModalBtn">
+        <span class="t" data-en="Cancel">Cancelar</span>
+      </button>
+      <button type="button" class="btn btn-gold" id="acceptPolicyModalBtn">
+        <svg viewBox="0 0 24 24" class="btn-icon" style="width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.5;"><polyline points="20 6 9 17 4 12"/></svg>
+        <span class="t" data-en="I Accept the Policies &amp; Services">Aceptar Políticas y Servicios</span>
+      </button>
+    </div>
+  </div>
+</div>
 
 </main>
 <footer class="footer">
@@ -316,6 +416,6 @@
      on this page. Safe to leave here even before EMAILJS_CONFIG (in script.js)
      is filled in -- it simply won't be used until then. -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="script.js?v=1788833345"></script>
+<script src="script.js?v=1788492096"></script>
 </body>
 </html>
